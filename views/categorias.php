@@ -22,13 +22,14 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
 </div>
 <div class="pill">
 Olá, <strong><?= htmlspecialchars($nomeUser) ?></strong>
-• <a href="/loja_roupas/index.php?controller=auth&action=logout">Sair</a>
+• <a href="index.php?controller=auth&action=logout">Sair</a>
 </div>
 </div>
 <div class="grid" style="grid-template-columns: 1fr 2fr;">
 <div class="card">
 <h2><?= $editar ? "Editar Categoria #".(int)$editar['id'] : "Nova Categoria" ?></h2>
 <form method="post" action="index.php?controller=categoria&action=salvar">
+<?= csrfCampo() ?>
 <input type="hidden" name="id" value="<?= $editar ? (int)$editar['id'] : 0 ?>">
 <label>Nome</label>
 <input class="input" type="text" name="nome" required
@@ -63,24 +64,19 @@ value="<?= $editar ? htmlspecialchars($editar['nome']) : '' ?>">
 <td>
 <a class="btn" href="index.php?controller=categoria&action=index&id=<?= (int)$c['id'] ?>">Editar</a>
 <?php if ((int)$c['ativo'] === 1): ?>
-<a class="btn btn-danger"
-href="index.php?controller=categoria&action=toggle&id=<?= (int)$c['id'] ?>&ativo=0"
-onclick="return confirm('Inativar esta categoria?')">Inativar</a>
+<form method="post" action="index.php?controller=categoria&action=toggle" class="form-inline" onsubmit="return confirm('Inativar esta categoria?')"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="ativo" value="0"><button class="btn btn-danger" type="submit">Inativar</button></form>
 <?php else: ?>
-<a class="btn btn-success"
-href="index.php?controller=categoria&action=toggle&id=<?= (int)$c['id'] ?>&ativo=1">Ativar</a>
+<form method="post" action="index.php?controller=categoria&action=toggle" class="form-inline"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="ativo" value="1"><button class="btn btn-success" type="submit">Ativar</button></form>
 <?php endif; ?>
 <!-- BOTÃO DE EXCLUIR ADICIONADO -->
-<a class="btn btn-danger"
-href="index.php?controller=categoria&action=deletar&id=<?= (int)$c['id'] ?>"
-onclick="return confirm('⚠️ Deseja realmente excluir esta categoria permanentemente?')">Excluir</a>
+<form method="post" action="index.php?controller=categoria&action=deletar" class="form-inline" onsubmit="return confirm('⚠️ Deseja realmente excluir esta categoria permanentemente?')"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$c['id'] ?>"><button class="btn btn-danger" type="submit">Excluir</button></form>
 </td>
 </tr>
 <?php endforeach; ?>
 </tbody>
 </table>
 <div style="margin-top:14px;">
-<a class="btn" href="/loja_roupas/index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
+<a class="btn" href="index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
 </div>
 </div>
 </div>

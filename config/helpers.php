@@ -138,6 +138,15 @@ function csrfValido(): bool
     return is_string($enviado) && $enviado !== '' && hash_equals(csrfToken(), $enviado);
 }
 
+/** Painel (vendedor/admin): exige POST com token CSRF válido; senão responde 403. */
+function csrfExigir(): void
+{
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || !csrfValido()) {
+        http_response_code(403);
+        die("Requisição inválida ou sessão expirada. Volte à página anterior, recarregue e tente de novo.");
+    }
+}
+
 /** Só aceita redirecionamento interno (evita open redirect). */
 function destinoInternoSeguro(?string $destino, string $padrao): string
 {

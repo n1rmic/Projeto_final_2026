@@ -30,6 +30,7 @@ class EntradaController
     public function salvar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
  
         $fornecedorId = (int) ($_POST['fornecedor_id'] ?? 0);
@@ -64,6 +65,9 @@ class EntradaController
  
         try {
             $entradaModel->registrar($fornecedorId, $itens);
+        } catch (PDOException $e) {
+            error_log('[entrada] ' . $e->getMessage());
+            die("Erro ao registrar a entrada. Tente novamente.");
         } catch (Throwable $e) {
             die("Erro ao registrar entrada: " . htmlspecialchars($e->getMessage()));
         }

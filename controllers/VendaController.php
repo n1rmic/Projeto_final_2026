@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Venda.php';
+require_once __DIR__ . '/../models/venda.php';
 require_once __DIR__ . '/../models/cliente.php';
 class VendaController
 {
@@ -31,6 +31,7 @@ class VendaController
     public function salvar(): void
     {
         $this->check();
+        csrfExigir();
 
         $clienteId   = (int) ($_POST['cliente_id'] ?? 0);
         $variacaoIds = $_POST['variacao_id'] ?? [];
@@ -74,10 +75,14 @@ class VendaController
         try {
             $vendaId = $vendaModel->registrar($usuarioId, $clienteId, $itens);
             $_SESSION['sucesso'] = "Venda #{$vendaId} finalizada com sucesso no caixa!";
+        } catch (PDOException $e) {
+            error_log('[venda] ' . $e->getMessage());
+            $_SESSION['erro'] = "Erro no caixa ao registrar a venda. Tente novamente.";
         } catch (RuntimeException $e) {
             $_SESSION['erro'] = "Não foi possível concluir a venda: " . $e->getMessage();
         } catch (Throwable $e) {
-            $_SESSION['erro'] = "Erro no caixa ao registrar a venda: " . $e->getMessage();
+            error_log('[venda] ' . $e->getMessage());
+            $_SESSION['erro'] = "Erro no caixa ao registrar a venda. Tente novamente.";
         }
 
         header("Location: index.php?controller=venda&action=index");
@@ -87,8 +92,9 @@ class VendaController
     public function emitirNota(): void
     {
         $this->check();
+        csrfExigir();
 
-        $vendaId = (int) ($_GET['venda_id'] ?? 0);
+        $vendaId = (int) ($_POST['venda_id'] ?? 0);
         if ($vendaId <= 0) {
             $_SESSION['erro'] = "Venda inválida.";
             header("Location: index.php?controller=venda&action=index");
@@ -101,8 +107,14 @@ class VendaController
         try {
             $notaModel->emitirParaVenda($vendaId);
             $_SESSION['sucesso'] = "Nota Fiscal emitida com sucesso para a venda #{$vendaId}!";
-        } catch (Throwable $e) {
+        } catch (PDOException $e) {
+            error_log('[nota] ' . $e->getMessage());
+            $_SESSION['erro'] = "Não foi possível emitir a nota fiscal. Tente novamente.";
+        } catch (RuntimeException | InvalidArgumentException $e) {
             $_SESSION['erro'] = "Não foi possível emitir a nota fiscal: " . $e->getMessage();
+        } catch (Throwable $e) {
+            error_log('[nota] ' . $e->getMessage());
+            $_SESSION['erro'] = "Não foi possível emitir a nota fiscal. Tente novamente.";
         }
 
         header("Location: index.php?controller=venda&action=index");

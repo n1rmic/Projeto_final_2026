@@ -8,7 +8,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
   <title>Entradas de Mercadoria</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="icon" type="image/png" href="public/assets/img/dashboard.png">
-  <link rel="stylesheet" href="/loja_roupas/public/assets/css/style.css?v=<?= time() ?>">
+  <link rel="stylesheet" href="public/assets/css/style.css?v=<?= time() ?>">
 </head>
 <body>
 
@@ -25,7 +25,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
     </div>
     <div class="pill">
       Olá, <strong><?= htmlspecialchars($nomeUser) ?></strong>
-      • <a href="/loja_roupas/index.php?controller=auth&action=logout">Sair</a>
+      • <a href="index.php?controller=auth&action=logout">Sair</a>
     </div>
   </div>
  
@@ -33,6 +33,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
     <h2>Registrar Nova Entrada</h2>
  
     <form method="post" action="index.php?controller=entrada&action=salvar">
+<?= csrfCampo() ?>
       <label>Fornecedor</label>
       <select class="input" name="fornecedor_id" required>
         <option value="">Selecione...</option>
@@ -107,7 +108,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
       </tbody>
     </table>
     <div style="margin-top:14px;">
-      <a class="btn" href="/loja_roupas/index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
+      <a class="btn" href="index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
     </div>
   </div>
 </div>

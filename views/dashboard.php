@@ -26,7 +26,7 @@ $perfil = $_SESSION['perfil'] ?? 'vendedor';
 <div class="pill">
 Logado como <strong><?php echo htmlspecialchars($nome); ?></strong>
 (<?php echo htmlspecialchars($perfil); ?>)
-• <a href="/loja_roupas/index.php?controller=auth&action=logout">Sair</a>
+• <a href="index.php?controller=auth&action=logout">Sair</a>
 </div>
 </div>
 <div class="card">
@@ -36,17 +36,18 @@ Escolha um módulo para continuar.
 </p>
 
 <div class="nav">
-  <a href="/loja_roupas/index.php?controller=produto&action=index">Produtos</a>
+  <a href="index.php?controller=produto&action=index">Produtos</a>
  
   <?php if (($_SESSION['perfil'] ?? '') === 'admin'): ?>
-    <a href="/loja_roupas/index.php?controller=categoria&action=index">Categorias</a>
-    <a href="/loja_roupas/index.php?controller=fornecedor&action=index">Fornecedores</a>
+    <a href="index.php?controller=categoria&action=index">Categorias</a>
+    <a href="index.php?controller=fornecedor&action=index">Fornecedores</a>
+    <a href="index.php?controller=usuario&action=create">Cadastrar vendedor</a>
   <?php endif; ?>
  
-  <a href="/loja_roupas/index.php?controller=entrada&action=index">Entradas</a>
-  <a href="/loja_roupas/index.php?controller=venda&action=index">Vendas</a>
-  <a href="/loja_roupas/index.php?controller=relatorio&action=index">Relatórios</a>
-  <a href="/loja_roupas/index.php?controller=loja&action=index" target="_blank" rel="noopener">🛒 Visitar o site</a>
+  <a href="index.php?controller=entrada&action=index">Entradas</a>
+  <a href="index.php?controller=venda&action=index">Vendas</a>
+  <a href="index.php?controller=relatorio&action=index">Relatórios</a>
+  <a href="index.php?controller=loja&action=index" target="_blank" rel="noopener">🛒 Visitar o site</a>
 </div>
 
 

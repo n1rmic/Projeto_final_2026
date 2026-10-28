@@ -283,6 +283,11 @@ label{
 }
 
 /* Cria o espaçamento entre os botões */
+/* Formulário de uma linha só (botões que antes eram links GET) */
+form.form-inline { display: inline; margin: 0; padding: 0; background: none; border: 0; box-shadow: none; }
+.td-acoes .form-inline { margin-right: 8px; }
+.td-acoes .form-inline:last-child { margin-right: 0; }
+
 .td-acoes .btn {
   margin-right: 8px;
 }

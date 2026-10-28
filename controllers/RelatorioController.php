@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Relatorio.php';
-require_once __DIR__ . '/../models/Estoque.php';
+require_once __DIR__ . '/../models/estoque.php';
  
 class RelatorioController
 {

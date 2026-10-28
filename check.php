@@ -1,37 +1,31 @@
 <?php
-// 1. Inclui o seu arquivo de conexão (ajuste o nome se for diferente)
-require_once 'config/db.php';
+// Verificação rápida do banco: conta as tabelas e lista as encontradas.
+require_once __DIR__ . '/config/db.php';
 
 try {
-    // 2. Tenta obter a conexão
-    $db = $conexao; // Usando a variável de conexão definida em db.php
+    $db = Database::getConnection();
 
-    // 3. Executa o comando para listar as tabelas
     $query = $db->query("SHOW TABLES");
     $tabelasEncontradas = $query->fetchAll(PDO::FETCH_COLUMN);
 
     $total = count($tabelasEncontradas);
-    $meta = 14;
+    $meta = 17; // tabelas do loja_roupas.sql
 
     echo "<h1>🔍 Verificação do Sistema</h1>";
 
-    // 4. Lógica de comparação
     if ($total == $meta) {
-        echo "<p style='color: green;'>Sucesso! O banco de dados está completo com as 14 tabelas.</p>";
+        echo "<p style='color: green;'>Sucesso! O banco de dados está completo com as $meta tabelas.</p>";
     } else {
-        $faltando = $meta - $total;
-        echo "<p style='color: red;'>Atenção: O banco possui $total tabelas. Estão <strong>faltando $faltando</strong> para chegar às 14.</p>";
+        echo "<p style='color: red;'>Atenção: o banco possui $total tabelas, mas o esperado são $meta.</p>";
     }
 
-    // 5. Listagem das tabelas existentes
     echo "<h3>Tabelas encontradas no banco:</h3>";
     echo "<ul>";
     foreach ($tabelasEncontradas as $tabela) {
-        echo "<li>$tabela</li>";
+        echo "<li>" . htmlspecialchars($tabela) . "</li>";
     }
     echo "</ul>";
 
 } catch (Exception $e) {
-    echo "Erro ao carregar o teste: " . $e->getMessage();
+    echo "Erro ao carregar o teste: " . htmlspecialchars($e->getMessage());
 }
-?>

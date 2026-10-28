@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Fornecedor.php';
+require_once __DIR__ . '/../models/fornecedor.php';
  
 class FornecedorController
 {
@@ -22,6 +22,7 @@ class FornecedorController
     public function salvar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
  
         $id       = (int) ($_POST['id'] ?? 0);
@@ -54,10 +55,11 @@ class FornecedorController
     public function toggle(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
  
-        $id    = (int) ($_GET['id'] ?? 0);
-        $ativo = (int) ($_GET['ativo'] ?? 1);
+        $id    = (int) ($_POST['id'] ?? 0);
+        $ativo = (int) ($_POST['ativo'] ?? 1);
  
         if ($id <= 0) die("ID inválido.");
  

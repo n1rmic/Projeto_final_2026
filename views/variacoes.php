@@ -27,6 +27,7 @@
         <div class="card">
             <h2><?= $editar ? "Editar Variação #" . (int)$editar['id'] : "Cadastrar SKU / Variação" ?></h2>
             <form method="post" action="index.php?controller=variacao&action=salvar">
+<?= csrfCampo() ?>
                 <input type="hidden" name="id" value="<?= $editar ? (int)$editar['id'] : 0 ?>">
                 <input type="hidden" name="produto_id" value="<?= (int)$produto['id'] ?>">
 
@@ -94,7 +95,7 @@
                                 <td>R$ <?= number_format($v['preco'], 2, ',', '.') ?></td>
                                 <td>
                                     <a class="btn" href="index.php?controller=variacao&action=index&produto_id=<?= (int)$produto['id'] ?>&id=<?= (int)$v['id'] ?>">Editar</a>
-                                    <a class="btn btn-danger" href="index.php?controller=variacao&action=deletar&produto_id=<?= (int)$produto['id'] ?>&id=<?= (int)$v['id'] ?>" onclick="return confirm('Excluir este SKU?')">Excluir</a>
+                                    <form method="post" action="index.php?controller=variacao&action=deletar" class="form-inline" onsubmit="return confirm('Excluir este SKU?')"><?= csrfCampo() ?><input type="hidden" name="produto_id" value="<?= (int)$produto['id'] ?>"><input type="hidden" name="id" value="<?= (int)$v['id'] ?>"><button class="btn btn-danger" type="submit">Excluir</button></form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

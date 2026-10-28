@@ -8,7 +8,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Vendedor';
   <title>Caixa PDV - Finalizar Venda</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="public/assets/img/dashboard.png">
-  <link rel="stylesheet" href="/loja_roupas/public/assets/css/style.css">
+  <link rel="stylesheet" href="public/assets/css/style.css">
   <style>
     /* Estilos do Terminal de Caixa (PDV) */
     .pdv-grid {
@@ -111,7 +111,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Vendedor';
     </div>
     <div class="pill">
       Vendedor: <strong><?= htmlspecialchars($nomeUser) ?></strong>
-      • <a href="/loja_roupas/index.php?controller=auth&action=logout">Sair</a>
+      • <a href="index.php?controller=auth&action=logout">Sair</a>
     </div>
   </div>
 
@@ -131,6 +131,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Vendedor';
   <?php endif; ?>
 
   <form method="post" action="index.php?controller=venda&action=salvar" id="form-caixa">
+<?= csrfCampo() ?>
     <div class="pdv-grid">
       
       <!-- COLUNA DA ESQUERDA: REGISTRO DE ITENS DA COMPRA -->
@@ -235,7 +236,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Vendedor';
         </div>
 
         <div style="margin-top: 14px; text-align: center;">
-          <a class="btn btn-secondary" href="/loja_roupas/index.php?controller=auth&action=dashboard" style="width:100%;">
+          <a class="btn btn-secondary" href="index.php?controller=auth&action=dashboard" style="width:100%;">
             Voltar ao Dashboard
           </a>
         </div>
@@ -273,7 +274,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Vendedor';
             <td><?= date('d/m/Y', strtotime($v['data'])) ?></td>
             <td><strong>R$ <?= number_format((float)$v['valor_total'], 2, ',', '.') ?></strong></td>
             <td>
-              <a class="btn" href="index.php?controller=venda&action=emitirNota&venda_id=<?= (int)$v['id'] ?>">Emitir NF</a>
+              <form method="post" action="index.php?controller=venda&action=emitirNota" class="form-inline"><?= csrfCampo() ?><input type="hidden" name="venda_id" value="<?= (int)$v['id'] ?>"><button class="btn " type="submit">Emitir NF</button></form>
               <a class="btn btn-secondary" href="index.php?controller=venda&action=verNota&venda_id=<?= (int)$v['id'] ?>">Ver NF</a>
             </td>
           </tr>

@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../models/Produto.php';
-require_once __DIR__ . '/../models/Categoria.php';
+require_once __DIR__ . '/../models/produto.php';
+require_once __DIR__ . '/../models/categoria.php';
 
 class ProdutoController
 {
@@ -24,6 +24,7 @@ class ProdutoController
     public function salvar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
         
         $id = (int)($_POST['id'] ?? 0);
@@ -55,10 +56,11 @@ class ProdutoController
     public function toggle(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
         
-        $id = (int)($_GET['id'] ?? 0);
-        $ativo = (int)($_GET['ativo'] ?? 1);
+        $id = (int)($_POST['id'] ?? 0);
+        $ativo = (int)($_POST['ativo'] ?? 1);
         
         if ($id <= 0) die("ID inválido.");
         
@@ -73,9 +75,10 @@ class ProdutoController
     public function deletar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
 
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? 0);
         if ($id <= 0) die("ID inválido.");
 
         // 1. Apaga as imagens do produto na pasta uploads
@@ -162,18 +165,19 @@ public function listarJson(): void
     try {
         $conn = Database::getConnection();
         $stmt = $conn->query("
-            SELECT p.id, p.nome, p.imagem, COALESCE(MIN(v.preco), 0) AS preco, v.sku
+            SELECT p.id, p.nome, COALESCE(MIN(v.preco), 0) AS preco, MIN(v.sku) AS sku
             FROM produto p
             LEFT JOIN variacao v ON v.produto_id = p.id
             WHERE p.ativo = 1
-            GROUP BY p.id, p.nome, p.imagem
+            GROUP BY p.id, p.nome
             ORDER BY p.nome ASC
         ");
 
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     } catch (Throwable $e) {
         http_response_code(500);
-        echo json_encode(['erro' => $e->getMessage()]);
+        error_log('[produto] ' . $e->getMessage());
+        echo json_encode(['erro' => 'Erro ao listar produtos.']);
     }
     exit;
 }

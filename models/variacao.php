@@ -29,7 +29,7 @@ class Variacao
         return $r ?: null;
     }
 
-    public function inseri(int $produtoId, ?string $tamanho, ?string $cor, string $sku, float $preco): int
+    public function inseri(int $produtoId, string $tamanho, string $cor, string $sku, float $preco): int
     {
         $stmt = $this->conn->prepare("
             INSERT INTO variacao (produto_id, tamanho, cor, sku, preco)
@@ -45,7 +45,7 @@ class Variacao
         return (int)$this->conn->lastInsertId();
     }
 
-    public function atualizar(int $id, ?string $tamanho, ?string $cor, string $sku, float $preco): void
+    public function atualizar(int $id, string $tamanho, string $cor, string $sku, float $preco): void
     {
         $stmt = $this->conn->prepare("
             UPDATE variacao 

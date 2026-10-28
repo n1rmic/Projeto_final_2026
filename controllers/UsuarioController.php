@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/usuario.php';
 
 
 class UsuarioController
@@ -7,6 +7,7 @@ class UsuarioController
     // Exibe a tela de formulário
     public function create()
     {
+        $this->exigirAdmin();
        require_once __DIR__ . '/../views/cadastro.php';
     }
 
@@ -14,6 +15,9 @@ class UsuarioController
     // Processa os dados recebidos do formulário
     public function store()
     {
+        $this->exigirAdmin();
+        csrfExigir();
+
         // 1. Receber os dados do $_POST
         $nome = $_POST['nome'] ?? '';
         $email = $_POST['email'] ?? '';
@@ -40,11 +44,23 @@ class UsuarioController
 
         if ($sucesso) {
             // Se deu certo, manda de volta para o login ou dashboard
-            header("Location: index.php?controller=auth&action=form");
+            header("Location: index.php?controller=auth&action=dashboard");
             exit;
         } else {
             die("Erro ao cadastrar o vendedor no banco de dados.");
         }
     }
-}
 
+    // Só o administrador logado pode cadastrar vendedores
+    private function exigirAdmin(): void
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            header("Location: index.php?controller=auth&action=form");
+            exit;
+        }
+        if (($_SESSION['perfil'] ?? '') !== 'admin') {
+            http_response_code(403);
+            die("Acesso negado.");
+        }
+    }
+}

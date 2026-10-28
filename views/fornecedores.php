@@ -8,7 +8,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
   <title>Fornecedores</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="public/assets/img/dashboard.png">
-  <link rel="stylesheet" href="/loja_roupas/public/assets/css/style.css">
+  <link rel="stylesheet" href="public/assets/css/style.css">
 </head>
 <body>
   <div class="container">
@@ -22,7 +22,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
       </div>
       <div class="pill">
         Olá, <strong><?= htmlspecialchars($nomeUser) ?></strong>
-        • <a href="/loja_roupas/index.php?controller=auth&action=logout">Sair</a>
+        • <a href="index.php?controller=auth&action=logout">Sair</a>
       </div>
     </div>
  
@@ -31,6 +31,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
         <h2><?= $editar ? "Editar Fornecedor #".(int)$editar['id'] : "Novo Fornecedor" ?></h2>
  
         <form method="post" action="index.php?controller=fornecedor&action=salvar">
+<?= csrfCampo() ?>
           <input type="hidden" name="id" value="<?= $editar ? (int)$editar['id'] : 0 ?>">
  
           <label>Nome</label>
@@ -102,12 +103,9 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
           <a class="btn" href="index.php?controller=fornecedor&action=index&id=<?= (int)$f['id'] ?>">Editar</a>
           
           <?php if ((int)$f['ativo'] === 1): ?>
-            <a class="btn btn-danger"
-               href="index.php?controller=fornecedor&action=toggle&id=<?= (int)$f['id'] ?>&ativo=0"
-               onclick="return confirm('Inativar este fornecedor?')">Inativar</a>
+            <form method="post" action="index.php?controller=fornecedor&action=toggle" class="form-inline" onsubmit="return confirm('Inativar este fornecedor?')"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$f['id'] ?>"><input type="hidden" name="ativo" value="0"><button class="btn btn-danger" type="submit">Inativar</button></form>
           <?php else: ?>
-            <a class="btn btn-success"
-               href="index.php?controller=fornecedor&action=toggle&id=<?= (int)$f['id'] ?>&ativo=1">Ativar</a>
+            <form method="post" action="index.php?controller=fornecedor&action=toggle" class="form-inline"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$f['id'] ?>"><input type="hidden" name="ativo" value="1"><button class="btn btn-success" type="submit">Ativar</button></form>
           <?php endif; ?>
         </td>
       </tr>
@@ -121,7 +119,7 @@ $nomeUser = $_SESSION['nome'] ?? 'Usuário';
 
 
         <div style="margin-top:14px;">
-          <a class="btn" href="/loja_roupas/index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
+          <a class="btn" href="index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
         </div>
       </div>
     </div>

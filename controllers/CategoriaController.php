@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/Categoria.php';
+require_once __DIR__ . '/../models/categoria.php';
 class CategoriaController
 {
 public function index(): void
@@ -17,6 +17,7 @@ require_once __DIR__ . '/../views/categorias.php';
 public function salvar(): void
 {
 $this->check();
+        csrfExigir();
 $this->onlyAdmin();
 $id = (int)($_POST['id'] ?? 0);
 $nome = trim($_POST['nome'] ?? '');
@@ -35,9 +36,10 @@ exit;
 public function deletar(): void
 {
     $this->check();
+        csrfExigir();
     $this->onlyAdmin();
 
-    $id = (int)($_GET['id'] ?? 0);
+    $id = (int)($_POST['id'] ?? 0);
     if ($id <= 0) {
         die("ID inválido.");
     }
@@ -56,9 +58,10 @@ public function deletar(): void
 public function toggle(): void
 {
 $this->check();
+        csrfExigir();
 $this->onlyAdmin();
-$id = (int)($_GET['id'] ?? 0);
-$ativo = (int)($_GET['ativo'] ?? 1);
+$id = (int)($_POST['id'] ?? 0);
+$ativo = (int)($_POST['ativo'] ?? 1);
 if ($id <= 0) die("ID inválido.");
 $categoriaModel = new Categoria();
 $categoriaModel->setAtivo($id, $ativo === 1);

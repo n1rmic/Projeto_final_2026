@@ -1,0 +1,12 @@
+# Sem listagem de pastas
+Options -Indexes
+
+# Arquivos internos: dump do banco, documentação e dependências
+<FilesMatch "\.(sql|md|json|lock)$">
+    Require all denied
+</FilesMatch>
+
+# Diagnóstico do banco: só a partir do próprio computador
+<Files "check.php">
+    Require local
+</Files>

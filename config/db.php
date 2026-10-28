@@ -7,9 +7,9 @@ public static function getConnection()
 if (self::$conn === null) {
 try {
 self::$conn = new PDO(
-"mysql:host=localhost;dbname=loja_roupas;charset=utf8mb4",
-"root",
-"",
+"mysql:host=" . (getenv('DB_HOST') ?: 'localhost') . ";dbname=" . (getenv('DB_NAME') ?: 'loja_roupas') . ";charset=utf8mb4",
+getenv('DB_USER') ?: "root",
+getenv('DB_PASS') !== false ? getenv('DB_PASS') : "",
 [
 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC

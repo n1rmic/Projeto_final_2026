@@ -12,8 +12,10 @@
 
 
     <h2>Cadastro de Vendedor</h2>
+    <p><a href="index.php?controller=auth&action=dashboard">← Voltar ao painel</a></p>
    
     <form action="index.php?controller=usuario&action=store" method="POST">
+<?= csrfCampo() ?>
        
         <div>
             <label for="nome">Nome:</label>

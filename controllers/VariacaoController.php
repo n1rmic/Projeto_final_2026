@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../models/Variacao.php';
-require_once __DIR__ . '/../models/Produto.php';
+require_once __DIR__ . '/../models/variacao.php';
+require_once __DIR__ . '/../models/produto.php';
 
 class VariacaoController
 {
@@ -34,16 +34,15 @@ class VariacaoController
     public function salvar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
 
         $id = (int)($_POST['id'] ?? 0);
         $produtoId = (int)($_POST['produto_id'] ?? 0);
         $tamanho = trim($_POST['tamanho'] ?? '');
-        $tamanho = $tamanho === '' ? null : $tamanho;
-
+        
         $cor = trim($_POST['cor'] ?? '');
-        $cor = $cor === '' ? null : $cor;
-
+        
         $sku = trim($_POST['sku'] ?? '');
         
         $precoRaw = str_replace(['R$', ' ', '.'], '', $_POST['preco'] ?? '0');
@@ -73,10 +72,11 @@ class VariacaoController
     public function deletar(): void
     {
         $this->check();
+        csrfExigir();
         $this->onlyAdmin();
 
-        $id = (int)($_GET['id'] ?? 0);
-        $produtoId = (int)($_GET['produto_id'] ?? 0);
+        $id = (int)($_POST['id'] ?? 0);
+        $produtoId = (int)($_POST['produto_id'] ?? 0);
 
         if ($id <= 0 || $produtoId <= 0) {
             die("Parâmetros inválidos.");
@@ -87,7 +87,8 @@ class VariacaoController
         try {
             $variacaoModel->deletar($id);
        } catch (\PDOException $e) {
-    die("Erro real do MySQL: " . $e->getMessage());
+    error_log('[variacao] ' . $e->getMessage());
+    die("Não foi possível excluir este SKU. Ele pode estar vinculado a vendas, pedidos ou entradas.");
 }
 
         header("Location: index.php?controller=variacao&action=index&produto_id=" . $produtoId);

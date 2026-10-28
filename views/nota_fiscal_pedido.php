@@ -11,7 +11,7 @@ $horaPedidoFormatada = date('H:i:s', $timestampPedido);
     <meta charset="utf-8">
     <title>Nota Fiscal do Pedido - Nº <?= htmlspecialchars(str_pad((string) $pedido['id'], 6, '0', STR_PAD_LEFT)) ?></title>
    <link rel="icon" type="image/png" href="public/assets/img/dashboard.png">
-    <link rel="stylesheet" href="/loja_roupas/public/assets/css/nota.css">
+    <link rel="stylesheet" href="public/assets/css/nota.css">
 </head>
 
 <body>

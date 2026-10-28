@@ -440,8 +440,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`, `perfil`, `ativo`) VALUES
-(1, 'Admin Cosplay', 'admin@cosplay.com', '$2y$10$COLE_AQUI_O_HASH_DO_123456', 'admin', 1),
-(2, 'Vendedor Cosplay', 'vendedor@cosplay.com', '$2y$10$COLE_AQUI_O_HASH_DO_123456', 'vendedor', 1),
+(1, 'Admin Cosplay', 'admin@cosplay.com', '$2y$10$ZqNbYuMl/eDiaRWdjysYcO2QRiKWnYsMNBrQ4tAQxgvn.qJ6gy6Y6', 'admin', 1),
+(2, 'Vendedor Cosplay', 'vendedor@cosplay.com', '$2y$10$ZqNbYuMl/eDiaRWdjysYcO2QRiKWnYsMNBrQ4tAQxgvn.qJ6gy6Y6', 'vendedor', 1),
 (3, 'Bruno', 'bruno@email.com', '$2y$10$5APfpiR5id4AuY0kn02XHuMPDUM2aKeC9FRdzRY1UuuZeKOeSIhS.', 'admin', 1);
 
 -- --------------------------------------------------------

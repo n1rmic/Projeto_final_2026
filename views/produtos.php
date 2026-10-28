@@ -1,18 +1,3 @@
-<?php
-// helper simples para resolver imagem por ID sem usar banco
-function imagemProdutoUrl(int $produtoId): string
-{
-    $baseFs = __DIR__ . "/../public/uploads/produtos/";
-    $baseUrl = "public/uploads/produtos/";
-
-    foreach (['jpg', 'png', 'webp'] as $ext) {
-        if (file_exists($baseFs . $produtoId . '.' . $ext)) {
-            return $baseUrl . $produtoId . '.' . $ext;
-        }
-    }
-    return "public/assets/img/produto_sem_foto.png";
-}
-?>
 <!doctype html>
 <html lang="pt-br">
 
@@ -33,7 +18,7 @@ function imagemProdutoUrl(int $produtoId): string
             <div class="user">
                 Olá, <strong><?= htmlspecialchars($_SESSION['nome'] ?? 'Usuário') ?></strong>
                 <!-- BOTÃO DE VOLTAR ADICIONADO AQUI -->
-                <a class="btn" href="/loja_roupas/index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
+                <a class="btn" href="index.php?controller=auth&action=dashboard">Voltar ao Dashboard</a>
                 <a class="btn btn-ghost" href="index.php?controller=auth&action=logout">Sair</a>
             </div>
         </div>
@@ -43,6 +28,7 @@ function imagemProdutoUrl(int $produtoId): string
         <div class="card">
             <h2><?= $editar ? "Editar Produto #" . (int)$editar['id'] : "Cadastrar Produto" ?></h2>
             <form method="post" action="index.php?controller=produto&action=salvar" enctype="multipart/form-data">
+<?= csrfCampo() ?>
                 <input type="hidden" name="id" value="<?= $editar ? (int)$editar['id'] : 0 ?>">
 
                 <div class="form-group">
@@ -99,7 +85,7 @@ function imagemProdutoUrl(int $produtoId): string
                     <?php foreach ($produtos as $p): ?>
                         <tr>
                             <td>
-                                <img class="thumb" src="<?= imagemProdutoUrl((int)$p['id']) ?>" alt="produto">
+                                <img class="thumb" src="<?= imagemProduto((int)$p['id']) ?>" alt="produto">
                             </td>
                             <td>#<?= (int)$p['id'] ?></td>
                             <td><?= htmlspecialchars($p['nome']) ?></td>
@@ -113,9 +99,9 @@ function imagemProdutoUrl(int $produtoId): string
                                 <a class="btn" href="index.php?controller=variacao&action=index&produto_id=<?= (int)$p['id'] ?>">Variações</a>
 
                                 <?php if ((int)$p['ativo'] === 1): ?>
-                                    <a class="btn btn-danger" href="index.php?controller=produto&action=toggle&id=<?= (int)$p['id'] ?>&ativo=0" onclick="return confirm('Inativar este produto?')">Inativar</a>
+                                    <form method="post" action="index.php?controller=produto&action=toggle" class="form-inline" onsubmit="return confirm('Inativar este produto?')"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="ativo" value="0"><button class="btn btn-danger" type="submit">Inativar</button></form>
                                 <?php else: ?>
-                                    <a class="btn btn-success" href="index.php?controller=produto&action=toggle&id=<?= (int)$p['id'] ?>&ativo=1">Ativar</a>
+                                    <form method="post" action="index.php?controller=produto&action=toggle" class="form-inline"><?= csrfCampo() ?><input type="hidden" name="id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="ativo" value="1"><button class="btn btn-success" type="submit">Ativar</button></form>
                                 <?php endif; ?>
 
                                 <!-- BOTÃO DE EXCLUIR CHAMANDO A ACTION "deletar" -->

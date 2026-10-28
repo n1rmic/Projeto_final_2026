@@ -61,57 +61,8 @@ class NotaFiscal
         return (int) $this->conn->lastInsertId();
     }
  
-    // -------------------------
-    // Nota Fiscal de ENTRADA
-    // -------------------------
  
-    public function buscarPorEntrada(int $entradaId): ?array
-    {
-        $stmt = $this->conn->prepare(
-            "SELECT * FROM nota_fiscal_entrada WHERE entrada_id = :entrada_id"
-        );
-        $stmt->execute([':entrada_id' => $entradaId]);
-        $r = $stmt->fetch();
-        return $r ?: null;
-    }
  
-    /**
-     * Registra a NF de entrada vinculada a uma compra já confirmada.
-     * A chave de acesso é única — normalmente vem do fornecedor (XML da NF-e),
-     * mas aqui simulamos sua geração para fins didáticos.
-     */
-    public function registrarParaEntrada(int $entradaId, string $modelo, string $serie, string $numero, string $chaveAcesso): int
-    {
-        $jaExiste = $this->buscarPorEntrada($entradaId);
-        if ($jaExiste) {
-            throw new RuntimeException("Esta entrada já possui nota fiscal registrada.");
-        }
- 
-        $stmtEntrada = $this->conn->prepare("SELECT valor_total FROM entrada_mercadoria WHERE id = :id");
-        $stmtEntrada->execute([':id' => $entradaId]);
-        $entrada = $stmtEntrada->fetch();
- 
-        if (!$entrada) {
-            throw new InvalidArgumentException("Entrada não encontrada.");
-        }
- 
-        $stmt = $this->conn->prepare("
-            INSERT INTO nota_fiscal_entrada
-                (entrada_id, modelo, serie, numero, chave_acesso, data_emissao, valor_total)
-            VALUES
-                (:entrada_id, :modelo, :serie, :numero, :chave_acesso, CURDATE(), :valor_total)
-        ");
-        $stmt->execute([
-            ':entrada_id'  => $entradaId,
-            ':modelo'      => $modelo,
-            ':serie'       => $serie,
-            ':numero'      => $numero,
-            ':chave_acesso'=> $chaveAcesso,
-       ':valor_total' => $entrada['valor_total'],
-        ]);
- 
-        return (int) $this->conn->lastInsertId();
-    }
  
     // -------------------------
     // Auxiliar

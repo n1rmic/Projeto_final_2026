@@ -57,8 +57,10 @@ loja_roupas/
 ├── composer.json / composer.lock  dependências (Dompdf)
 ├── config/
 │   ├── db.php                     conexão PDO (Database::getConnection)
-│   ├── helpers.php                e(), moeda(), validarCpf(), formatarCep(), CSRF, flash, imagemProduto()...
-│   └── login.php, correios.php
+│   ├── helpers.php                e(), moeda(), formatarCep(), CSRF (site e painel), flash, imagemProduto()...
+│   │                              (validarCpf() está COMENTADA de propósito: o projeto aceita CPF fictício;
+│   │                               para validar CPF real, descomente a função e chame-a em ClienteController::validarDados)
+│   └── correios.php               (reservado ao cálculo de frete; ainda não é usado)
 ├── controllers/
 │   ├── AuthController.php         login, dashboard, logout, check(), onlyAdmin()
 │   ├── UsuarioController.php      cadastro de usuários
@@ -86,7 +88,7 @@ loja_roupas/
 ├── public/
 │   ├── assets/css/                style.css (dashboard), loja.css (site), nota.css
 │   ├── assets/js/loja.js          seletor de variação, máscaras de CPF/telefone
-│   ├── assets/img/                placeholder.svg, qrcode-pix.svg
+│   ├── assets/img/                placeholder.svg, qrcode-pix.svg, dashboard.png e site.png (ícones das abas)
 │   └── uploads/produtos/          imagens dos produtos
 ├── sql/cliente_site.sql           cliente_site + pedido + pedido_item
 └── vendor/                        Dompdf (Composer)
@@ -603,7 +605,7 @@ Teste direto: `index.php?controller=cep&action=buscar&cep=26272020`.
 - **Estoque:** ao finalizar, em **uma transação**: trava a linha de `estoque`, confere a quantidade, grava o pedido, dá baixa e registra a saída em `movimento_estoque`. Se qualquer passo falhar, nada é gravado. O preço do pedido é sempre lido do banco, nunca da sessão.
 - **`movimento_estoque`:** o código grava `variacao_id, tipo='saida', quantidade, origem='venda', origem_id=id do pedido`. Se as colunas da sua tabela tiverem outros nomes, ajuste **só** o método `registrarSaidaEstoque()` em `models/Pedido.php`.
 - **`produto&action=listarJson`:** o projeto não altera o controller do vendedor. Use `loja&action=produtosJson` ou, para corrigir o antigo, remova `p.imagem` do SELECT.
-- **Segurança:** prepared statements (PDO) em todas as consultas; `password_hash`/`password_verify`; token **CSRF** em todo POST; escape de saída (`e()` / `htmlspecialchars`); `session_regenerate_id` no login; `index.php` só aceita `[a-zA-Z0-9]` em `controller`/`action`; rotas administrativas protegidas por `check()`/`onlyAdmin()`; `.htaccess` bloqueando pastas internas.
+- **Segurança:** prepared statements (PDO) em todas as consultas; `password_hash`/`password_verify`; token **CSRF** em todo POST; escape de saída (`e()` / `htmlspecialchars`); `session_regenerate_id` no login (painel e site); cadastro de vendedor só para admin logado; ações de ativar/inativar/excluir/emitir NF só por POST com token; erros do banco vão para o log (`error_log`), não para a tela; `index.php` só aceita `[a-zA-Z0-9]` em `controller`/`action`; rotas administrativas protegidas por `check()`/`onlyAdmin()`; `.htaccess` bloqueando pastas internas, o dump `.sql`, os `.md` e o `vendor/` (e `check.php` só local). Usuários do dump: `admin@cosplay.com` e `vendedor@cosplay.com`, senha `123456`.
 
 ## 11. Limitações e pontos de atenção
 

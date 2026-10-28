@@ -31,15 +31,6 @@ class Estoque
         }
     }
  
-    public function buscarPorVariacao(int $variacaoId): ?array
-    {
-        $stmt = $this->conn->prepare(
-            "SELECT * FROM estoque WHERE variacao_id = :vid"
-        );
-        $stmt->execute([':vid' => $variacaoId]);
-        $r = $stmt->fetch();
-        return $r ?: null;
-    }
  
     /**
      * Ajusta a quantidade em estoque (positivo = entrada, negativo = saída).
@@ -90,11 +81,6 @@ public function listarBaixoEstoque(int $limiteEstoque = 5): array
     return $stmt->fetchAll();
 }
  
-    public function contarBaixoEstoque(): int
-    {
-  $sql = "SELECT COUNT(*) FROM estoque WHERE quantidade <= minimo";
-        return (int) $this->conn->query($sql)->fetchColumn();
-    }
 
     
 }

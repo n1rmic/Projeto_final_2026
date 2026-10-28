@@ -18,7 +18,8 @@
             </div>
         </div>
        
-        <form method="post" action="/loja_roupas/index.php?controller=auth&action=login">
+        <form method="post" action="index.php?controller=auth&action=login">
+<?= csrfCampo() ?>
             <label>E-mail</label>
             <input type="email" name="email" required autocomplete="username">
            
@@ -27,10 +28,6 @@
            
             <div style="margin-top:16px; display:flex; justify-content:flex-end; align-items: center;">
                 <button class="btn" type="submit">Entrar</button>
-               
-                <a href="index.php?controller=usuario&action=create" class="btn" style="margin: 3px; text-decoration: none; text-align: center; display: inline-block;">
-                    Cadastrar
-                </a>
             </div>
         </form>
 

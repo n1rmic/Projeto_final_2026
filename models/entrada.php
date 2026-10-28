@@ -39,15 +39,6 @@ class Entrada
     return $this->conn->query($sql)->fetchAll();
 }
 
-    public function buscarItensDaVariacao(int $variacaoId): array
-    {
-        // usado em relatórios; não obrigatório na tela de cadastro
-        $stmt = $this->conn->prepare("
-            SELECT * FROM entrada_item WHERE variacao_id = :vid
-        ");
-        $stmt->execute([':vid' => $variacaoId]);
-        return $stmt->fetchAll();
-    }
  
     /**
      * Registra uma entrada completa (cabeçalho + itens) em uma única transação
