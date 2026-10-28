@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Sem imagem">
+  <rect width="400" height="400" fill="#ebe7f3"/>
+  <g transform="translate(120 110)" fill="none" stroke="#9d92b8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 30c0-14 14-22 30-22h100c16 0 30 8 30 22v55c0 50-40 85-80 85S10 135 10 85V30z"/>
+    <ellipse cx="55" cy="75" rx="18" ry="12"/>
+    <ellipse cx="125" cy="75" rx="18" ry="12"/>
+    <path d="M65 120c14 10 36 10 50 0"/>
+  </g>
+  <text x="200" y="335" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#7d7398">sem imagem</text>
+</svg>
