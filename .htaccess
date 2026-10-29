@@ -10,3 +10,13 @@ Options -Indexes
 <Files "check.php">
     Require local
 </Files>
+
+
+# URLs amigáveis: /home abre a loja e /painel abre o login do vendedor
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^home/$ home [R=301,L]
+    RewriteRule ^home$ index.php?controller=loja&action=index [L,QSA]
+    RewriteRule ^painel/$ painel [R=301,L]
+    RewriteRule ^painel$ index.php?controller=auth&action=form [L,QSA]
+</IfModule>
